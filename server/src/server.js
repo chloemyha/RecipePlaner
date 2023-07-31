@@ -188,7 +188,6 @@ app.post("/SignUp", async (req, res) => {
 // ...
 app.get("/verify-email", async (req, res) => {
   try {
-    console.log(req.query)
     const verificationCode = req.query.code;
     const email = req.query.email;
     console.log("Verification code:", verificationCode);

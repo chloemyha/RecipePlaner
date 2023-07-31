@@ -1,11 +1,12 @@
-// emailSender.js
-import nodemailer from "nodemailer"
-// Create a transporter with your email service credentials
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
+
 const transporter = nodemailer.createTransport({
-  service: "Gmail", // e.g., "Gmail", "Outlook", etc.
+  service: "Gmail", // Replace with the appropriate email service (e.g., "Gmail", "Outlook", etc.)
   auth: {
-    user: "chloehuynh2401@gmail.com", // Your email address
-    pass:"xwtggnagtukasvxa", // Your email password or an app password if using Gmail
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -14,7 +15,7 @@ async function sendVerificationEmail(email, verificationCode) {
   try {
     // Compose the email
     const mailOptions = {
-      from: "chloehuynh2401@gmail.com", // Your email address
+      from: "myrecipeplanner@gmail.com", // Your email address
       to: email,
       subject: "Verify Your Email",
       html: `
@@ -22,7 +23,7 @@ async function sendVerificationEmail(email, verificationCode) {
       <p>Thank you for signing up. Please enter the following verification code to verify your email:</p>
       <p><strong>Verification Code: ${verificationCode}</strong></p>
       <a href="http://localhost:3000/verify-email?email=${email}&code=${verificationCode}">Verify Email</a>
-    `,
+      `,
     };
 
     // Send the email
