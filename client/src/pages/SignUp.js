@@ -1,15 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 function SignUp() {
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [ email, setEmail] = useState();
-  const [ password, setPassword] = useState();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [ email, setEmail] = useState("");
+  const [ password, setPassword] = useState("");
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Validation checks
+    if (firstName.trim() === "" || lastName.trim() === "") {
+      alert("First name and last name cannot be blank.");
+      return;
+    }
+
+    if (/\d/.test(firstName) || /\d/.test(lastName)) {
+      alert("First name and last name cannot have numbers.");
+      return;
+    }
+
+    if (
+      !/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])/.test(password) ||
+      password.length < 6
+    ) {
+      alert(
+        "Password must have at least 6 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character."
+      );
+      return;
+    }
+
     axios.post ('http://localhost:8000/SignUp',{firstName: firstName, lastName: lastName, email: email,password: password})
     .then((result) => {
       console.log(result);

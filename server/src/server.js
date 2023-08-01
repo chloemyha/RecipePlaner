@@ -7,7 +7,9 @@ import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import sendVerificationEmail  from "./emailService.js";
 import crypto from "crypto"; // Import the crypto module for generating verification tokens
-
+import bodyParser from "body-parser";
+import { send } from "process";
+import sendPasswordResetEmail from "./resetPassword.js";
 const app = express();
 
 app.use(
@@ -19,7 +21,7 @@ app.use(
 );
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(bodyParser.json());
 //display recipe details
 app.get("/recipe/:id", async (req, res) => {
   const { id } = req.params;
@@ -253,6 +255,59 @@ app.post("/login", async (req, res) => {
     });
   } else {
     res.status(409).json({ success: false, message: "No records found" });
+  }
+});
+
+// Endpoint for resetting the password
+app.post("/reset-password", async (req, res) => {
+  const { email } = req.body;
+
+  // Check if the user exists in the database (you should query your actual user collection here)
+  const user = await db.collection("users").findOne({ email: email });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  try {
+    // Generate a new password reset token 
+    const token = jwt.sign({ email }, "reset-password-secret-key", {
+      expiresIn: "1h", // The token will expire after 1 hour
+    });
+
+    // Send the reset token to the user 
+    await sendPasswordResetEmail(email,token)
+    res.status(200).json({ message: "Password reset token sent successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred. Please try again later." });
+  }
+});
+
+// Endpoint for updating the password
+app.post("/update-password", async (req, res) => {
+  const { email, token, newPassword } = req.body;
+
+  // Find the user in the database based on the email (you should query your actual user collection here)
+  const user = await db.collection("users").findOne({ email: email });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  try {
+    // You should validate the token here if needed
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database (you should update your actual user collection here)
+    await db.collection("users").updateOne(
+      { email: email },
+      { $set: { password: hashedPassword } }
+    );
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ message: "Failed to update the password. Please try again later." });
   }
 });
 

@@ -4,24 +4,41 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const [ email, setEmail] = useState();
   const [ password, setPassword] = useState();
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
 axios.defaults.withCredentials = true; 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    axios.post ('http://localhost:8000/login',{email, password})
-    .then( result => {
-      console.log(result);
-      if(result.status === 200) {
-        console.log(result.data)
-        navigate('/recipe');
-    } else if (result.status === 403) {
-      alert (result.message)
-  } else if (result.status === 409){
-    alert ( "Email not verified")
-  }})
-    .catch(err =>console.error(err))
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  try {
+    const response = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const responseData = await response.json();
+
+    if (response.status === 403) {
+      setMessage(responseData.message); // Display "Email not verified" alert
+    } else if (response.status === 200) {
+      setMessage(responseData.message); // Display "Login Successful" alert
+      navigate("/recipe")
+    } else if (response.status === 400) {
+      setMessage(responseData.message); // Display "Invalid password" alert
+    } else if (response.status === 409) {
+      setMessage(responseData.message); // Display "No records found" alert
+    } else {
+      setMessage("An error occurred. Please try again later.");
+    }
+  } catch (error) {
+    console.log(error)
+    setMessage("An error occurred. Please try again later.");
   }
+};
   return (
     <>
       <div className="Auth-form-container">
@@ -52,10 +69,11 @@ axios.defaults.withCredentials = true;
               <button type="submit" className="btn btn-primary">
                 Submit
               </button>
+              {message && <p>{message}</p>}
             </div>
             <div>
               <p className="forgot-password text-right mt-2">
-                Forgot <a href="#">password?</a>
+                Forgot <a href="/reset-password">password?</a>
               </p>
               <p className="sign-up text-right mt-2">
                 Don't have an account? <a href="./SignUp">Sign Up</a>

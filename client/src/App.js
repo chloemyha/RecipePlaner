@@ -17,8 +17,8 @@ import FavoriteRecipe from "./pages/FavoriteRecipe";
 import ShoppingList from "./pages/ShoppingList";
 import GroceryLocation from "./pages/GroceryLocation";
 import VerificationCodePage from "./pages/VerificationCodePage";
-import VerificationSuccessPage from "./pages/VerificationSuccessPage";
-
+import ForgotPasswordForm from "./pages/ForgotPassword";
+import NewPassword from "./pages/NewPassword";
 function App() {
   return (
     <BrowserRouter>
@@ -36,7 +36,8 @@ function App() {
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/grocery" element={<GroceryLocation />} />
             <Route path="/verify-email" element={<VerificationCodePage/>} />
-            <Route path="/verification-success" element={<VerificationSuccessPage/>} />
+            <Route path="/reset-password" element={<ForgotPasswordForm/>} />
+          <Route path="/update-password" element={<NewPassword/>} />
           </Routes>
         </div>
         <Footer />

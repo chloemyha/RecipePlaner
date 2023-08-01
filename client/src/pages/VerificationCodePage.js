@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 const EmailVerificationForm = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [email, setEmail] = useState('');
   const location = useLocation();
-
+    const navigate = useNavigate();
   useEffect(() => {
     // Extract email and verification code from the URL parameters
     const searchParams = new URLSearchParams(location.search);
@@ -38,6 +38,7 @@ const EmailVerificationForm = () => {
         alert('Email verification successful! You can now login with your account.');
         // Optionally, you can clear the verificationCode state and let the user enter a new code
         setVerificationCode('');
+        navigate('/login')
       } else {
         // Email verification failed, show error message or handle the error
         alert('Email verification failed: ' + data.message);
