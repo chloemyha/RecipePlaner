@@ -19,6 +19,7 @@ import GroceryLocation from "./pages/GroceryLocation";
 import VerificationCodePage from "./pages/VerificationCodePage";
 import ForgotPasswordForm from "./pages/ForgotPassword";
 import NewPassword from "./pages/NewPassword";
+import Logout from "./pages/Logout";
 function App() {
   return (
     <BrowserRouter>
@@ -38,9 +39,11 @@ function App() {
             <Route path="/verify-email" element={<VerificationCodePage/>} />
             <Route path="/reset-password" element={<ForgotPasswordForm/>} />
           <Route path="/update-password" element={<NewPassword/>} />
+          <Route path="/logout" element={<Logout/>} />
+
           </Routes>
         </div>
-        <Footer />
+       
       </div>
     </BrowserRouter>
   );

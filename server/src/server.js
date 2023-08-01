@@ -310,6 +310,13 @@ app.post("/update-password", async (req, res) => {
     res.status(500).json({ message: "Failed to update the password. Please try again later." });
   }
 });
+app.post("/logout", (req, res) => {
+  // Perform the logout logic here
+  // For example, invalidate the user session or clear any authentication tokens
+
+  // Return a response to indicate successful logout
+  res.json({ message: "Logged out successfully." });
+});
 
 /*CONNECT TO DATABASE*/
 

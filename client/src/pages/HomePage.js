@@ -6,6 +6,7 @@ export default function HomePage() {
   return (
     <>
       <HomePageDisplay />
+      <Footer/>
     </>
   );
 }

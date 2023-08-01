@@ -44,15 +44,16 @@ function NavBar() {
                 {" "}
                 Grocery Location <PlaceIcon />{" "}
               </Nav.Link>
-              <Button
-                color="secondary"
-                size="small"
-                variant="outlined"
-                href="/login"
-                className="me-auto my-2 my-lg-0"
-              >
-                <AccountCircleIcon font-size="large" />
-              </Button>
+              <NavDropdown title="Account" id="navbarScrollingDropdown">
+                <NavDropdown.Item href="/login">
+                  Sign In <AccountCircleIcon font-size="large" />
+
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/logout">
+                  Log out 
+                </NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -61,5 +62,4 @@ function NavBar() {
     </>
   );
 }
-
 export default NavBar;
