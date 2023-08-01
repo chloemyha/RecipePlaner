@@ -15,8 +15,11 @@ axios.defaults.withCredentials = true;
       if(result.status === 200) {
         console.log(result.data)
         navigate('/recipe');
-    }
-  })
+    } else if (result.status === 403) {
+      alert (result.message)
+  } else if (result.status === 409){
+    alert ( "Email not verified")
+  }})
     .catch(err =>console.error(err))
   }
   return (

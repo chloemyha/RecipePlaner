@@ -230,7 +230,13 @@ app.get("/verify-email", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   const user = await db.collection("users").findOne({ email: email });
+
   if (user) {
+    if (!user.isEmailVerified) {
+      // If isEmailVerified is false, user cannot log in
+      return res.status(403).json({ success: false, message: "Email not verified" });
+    }
+
     bcrypt.compare(password, user.password, (err, result) => {
       if (result) {
         //create a token securely authenticate the user and manage their session without relying on traditional methods like sessions, cookies, or storing sensitive data on the server.
@@ -240,13 +246,13 @@ app.post("/login", async (req, res) => {
           { expiresIn: "356d" }
         );
         res.cookie("token", token);
-        res.status(200).json({ success: true, message: 'Login Sucessful"' });
+        res.status(200).json({ success: true, message: "Login Successful" });
       } else {
-        res.status(400).json({ success: false, message: 'Invalid password"' });
+        res.status(400).json({ success: false, message: "Invalid password" });
       }
     });
   } else {
-    res.status(409).json({ success: false, message: 'No records found"' });
+    res.status(409).json({ success: false, message: "No records found" });
   }
 });
 
