@@ -15,7 +15,7 @@ const app = express();
 app.use(
   cors({
     origin: ["http://localhost:3000"],
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST","DELETE"],
     credentials: true,
   })
 );
@@ -310,6 +310,7 @@ app.post("/update-password", async (req, res) => {
     res.status(500).json({ message: "Failed to update the password. Please try again later." });
   }
 });
+
 app.post("/logout", (req, res) => {
   // Perform the logout logic here
   // For example, invalidate the user session or clear any authentication tokens
